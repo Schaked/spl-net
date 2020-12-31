@@ -15,13 +15,17 @@ public class Database {
 	//to prevent user from creating new Database
 	private Database() {
 		// TODO: implement
+
+	}
+	private static class singleton{
+		private static Database instance=new Database();
 	}
 
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static Database getInstance() {
-		return singleton;
+		return singleton.instance;
 	}
 	
 	/**
