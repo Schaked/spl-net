@@ -57,7 +57,7 @@ public abstract class BaseServer<T> implements Server<T> {
     }
 
     protected abstract void execute(BlockingConnectionHandler<T>  handler);
-
+//Wasn't included before
     public static <T> BaseServer<T> threadPerClient(
             int port,
             Supplier<MessagingProtocol<T>> protocolFactory,
