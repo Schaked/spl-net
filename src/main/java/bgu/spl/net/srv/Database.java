@@ -3,6 +3,7 @@ package bgu.spl.net.srv;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -16,6 +17,8 @@ import java.util.stream.Stream;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
+	private HashMap<String, User> userHashMap;
+	private HashMap<Integer,Course> courseHashMap;
 	private LinkedList <Course> coursesList;
 	private LinkedList<User> usersList;
 
@@ -60,6 +63,14 @@ public class Database {
 			ex.printStackTrace();
 		}
 		return false;
+	}
+
+	public HashMap<String, User> getUserHashMap() {
+		return userHashMap;
+	}
+
+	public HashMap<Integer, Course> getCourseHashMap() {
+		return courseHashMap;
 	}
 
 	public LinkedList<Course> getCoursesList() {
