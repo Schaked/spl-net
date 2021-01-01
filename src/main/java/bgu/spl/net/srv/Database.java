@@ -62,5 +62,11 @@ public class Database {
 		return false;
 	}
 
+	public LinkedList<Course> getCoursesList() {
+		return coursesList;
+	}
 
+	public LinkedList<User> getUsersList() {
+		return usersList;
+	}
 }

@@ -9,11 +9,11 @@ import java.util.Arrays;
 public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
-    private short optcode=0;
+    private int courseNumber;
+    private short optcode;
     private Command command;
     private String userName=null;
     private String password=null;
-    private int courseNumber=-1;
     private boolean isDoneDecoding=false;
 
     @Override
@@ -44,7 +44,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 7:
                 case 9:
                 case 10:
-                    courseNumber=decodeCourseNumberType(bytes);
+                    courseNumber = decodeCourseNumberType(bytes);
                     isDoneDecoding=true;
                     break;
                 case 8:
@@ -52,13 +52,15 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                         isDoneDecoding=true;
                     }
             }
-            command=getCommand(optcode);
+            if(isDoneDecoding){
+                command=getCommand(optcode);
+            }
         }
         return command;
     }
 
     public boolean decodeUserNameAndPasswordType(byte nextByte){
-        if(nextByte!='0'){
+        if(nextByte!='\0'){
             pushByte(nextByte);
         }
         else{
@@ -79,7 +81,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     }
 
     public boolean decodeUserNameType(byte nextByte){
-        if(nextByte!='0'){
+        if(nextByte!='\0'){
             pushByte(nextByte);
         }
         else{
@@ -94,9 +96,16 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
             case 1: return new AdminRegCommand(userName,password,optcode);
             case 2: return new StudentRegCommand(userName,password,optcode);
             case 3: return new LoginCommand(userName, password,optcode);
-            case 4: return new LogoutCommand()
+            case 4: return new LogoutCommand(optcode);
+            case 5: return new CourseRegCommand(optcode,courseNumber);
+            case 6: return new KdamCheckCommand(optcode,courseNumber);
+            case 7: return new CourseStatCommand(optcode,courseNumber);
+            case 8: return new StudentStatCommand(userName,optcode);
+            case 9: return new IsRegisteredCommand(optcode,courseNumber);
+            case 10: return new UnRegisterCommand(optcode,courseNumber);
+            case 11: return new MyCoursesCommand(optcode);
         }
-
+        return null;
     }
 
 
@@ -115,11 +124,6 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     {
         short result = (short)((byteArr[0] & 0xff) << 8);
         result += (short)(byteArr[1] & 0xff);
-        return result;
-    }
-    private String popString() {
-        String result = new String(bytes, 2, len, StandardCharsets.UTF_8);
-        len = 2;
         return result;
     }
 }
