@@ -14,4 +14,7 @@ public class Course {
         this.KdamCoursesList=kdamCoursesList;
         this.numOfMaxStudents=numOfMaxStudents;
     }
+    public Integer getNumOfMaxStudent(){
+        return this.numOfMaxStudents;
+    }
 }
