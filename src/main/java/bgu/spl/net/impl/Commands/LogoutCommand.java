@@ -9,7 +9,11 @@ public class LogoutCommand extends Command {
     }
 
     @Override
-    protected Command execute(BgrsProtocol protocol) {
+    public Command execute(BgrsProtocol protocol) {
+        String userName=protocol.getUserName();
+        if(!userName.isEmpty()){
+            protocol.setShouldTerminate(true);
+        }
         return null;
     }
 }

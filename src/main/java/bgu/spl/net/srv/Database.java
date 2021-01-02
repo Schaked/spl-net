@@ -4,7 +4,6 @@ package bgu.spl.net.srv;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -19,15 +18,13 @@ import java.util.stream.Stream;
 public class Database {
 	private HashMap<String, User> userHashMap;
 	private HashMap<Integer,Course> courseHashMap;
-	private LinkedList <Course> coursesList;
-	private LinkedList<User> usersList;
 
 
 
 	//to prevent user from creating new Database
 	private Database() {
-		coursesList= new LinkedList<>();
-		usersList=new LinkedList<>();
+		userHashMap=new HashMap<>();
+		courseHashMap=new HashMap<>();
 
 	}
 	private static class SingletonHolder{
@@ -55,7 +52,7 @@ public class Database {
 				if(data[2].length()>=3) {// checks that the KdamCoursesList isn't empty (length 2 means [])
 					kdamCourses = Stream.of(data[2].substring(1, data[2].length() - 1).split(",")).mapToInt(Integer::parseInt).toArray();
 				}
-				coursesList.add(new Course(Integer.parseInt(data[0]),data[1],kdamCourses,Integer.parseInt(data[3])));
+				courseHashMap.put(Integer.parseInt(data[0]),new Course(Integer.parseInt(data[0]),data[1],kdamCourses,Integer.parseInt(data[3])));
 				return true;
 			}
 		}
@@ -73,11 +70,4 @@ public class Database {
 		return courseHashMap;
 	}
 
-	public LinkedList<Course> getCoursesList() {
-		return coursesList;
-	}
-
-	public LinkedList<User> getUsersList() {
-		return usersList;
-	}
 }

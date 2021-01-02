@@ -8,7 +8,7 @@ public class KdamCheckCommand extends Command {
     }
 
     @Override
-    protected Command execute(BgrsProtocol protocol) {
+    public Command execute(BgrsProtocol protocol) {
         return null;
     }
 }

@@ -1,7 +1,5 @@
 package bgu.spl.net.srv;
 
-import java.lang.reflect.Array;
-import java.util.LinkedList;
 
 public class Course {
     private int courseNum;
@@ -14,6 +12,11 @@ public class Course {
         this.KdamCoursesList=kdamCoursesList;
         this.numOfMaxStudents=numOfMaxStudents;
     }
+
+    public int[] getKdamCoursesList() {
+        return KdamCoursesList;
+    }
+
     public Integer getNumOfMaxStudent(){
         return this.numOfMaxStudents;
     }

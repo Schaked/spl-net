@@ -8,16 +8,24 @@ public class User {
     private String userName;
     private String password;
     private boolean isAdmin;
+    private boolean isLogin;
     protected LinkedList<Integer> coursesReg;
 
     public User (String userName, String password){
         this.userName=userName;
         this.password=password;
         isAdmin=false;
+        isLogin=false;
         this.coursesReg = null;
     }
 
+    public boolean isLogin() {
+        return isLogin;
+    }
 
+    public void setLogin(boolean login) {
+        isLogin = login;
+    }
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
@@ -28,6 +36,9 @@ public class User {
     }
     public void isRegister(Integer course){
         coursesReg.contains(course);
+    }
 
+    public String getPassword() {
+        return password;
     }
 }
