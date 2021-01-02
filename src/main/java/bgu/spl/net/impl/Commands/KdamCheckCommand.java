@@ -1,6 +1,8 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
+import bgu.spl.net.srv.Course;
+import bgu.spl.net.srv.Database;
 import bgu.spl.net.srv.User;
 
 public class KdamCheckCommand extends Command {
@@ -10,9 +12,11 @@ public class KdamCheckCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        User thisUser = database.getUserHashMap().get(protocol.getUserName());
-        if(thisUser.isLogin()){
-           return thisUser.getRegList();
+        Course thisCourse = database.getCourseHashMap().get(CourseNumber);
+        if(thisCourse.getKdamCoursesList().length>0){
+//            return thisCourse.getKdamCoursesList();
+        return null;//return ACK and kdam list
         }
+        return null;// return ACK and empty string
     }
 }

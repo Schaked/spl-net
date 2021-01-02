@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
+import bgu.spl.net.srv.User;
 
 public class MyCoursesCommand extends Command {
 
@@ -10,6 +11,11 @@ public class MyCoursesCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        return null;
+        User thisUser = database.getUserHashMap().get(protocol.getUserName());
+        if(thisUser.isLogin()&&!thisUser.isAdmin()){
+//            return thisUser.getRegList();//return ACK and registered list
+            return null;
+        }
+        return null;//return empty string
     }
 }
