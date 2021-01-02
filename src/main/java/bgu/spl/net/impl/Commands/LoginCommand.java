@@ -3,13 +3,9 @@ package bgu.spl.net.impl.Commands;
 import bgu.spl.net.impl.BgrsProtocol;
 
 public class LoginCommand extends Command{
-    private String userName;
-    private String password;
 
     public LoginCommand(String userName, String password, short optcode) {
         super(userName, password, optcode);
-        this.userName=userName;
-        this.password=password;
     }
 
     @Override

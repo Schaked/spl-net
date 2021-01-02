@@ -1,17 +1,14 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
-import bgu.spl.net.srv.Course;
 import bgu.spl.net.srv.User;
 
-import java.util.LinkedList;
+
 
 public class CourseRegCommand extends Command {
-//    private Integer courseNumber;
 
     public CourseRegCommand(short optcode, int CourseNumber) {
         super(optcode, CourseNumber);
-//        this.courseNumber = CourseNumber;
     }
     public boolean KDAMIsOk(){
         int[] kdamArr = database.getCourseHashMap().get(CourseNumber).getKdamCoursesList();
