@@ -28,4 +28,7 @@ public class Course {
     public void setOneLessSpot(){
         this.availableSpots = this.availableSpots-1;
     }
+    public void setOneMoreSpot(){
+        this.availableSpots = this.availableSpots+1;
+    }
 }

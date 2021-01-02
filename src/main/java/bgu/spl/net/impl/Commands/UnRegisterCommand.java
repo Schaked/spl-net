@@ -1,6 +1,8 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
+import bgu.spl.net.srv.Database;
+import bgu.spl.net.srv.User;
 
 public class UnRegisterCommand extends Command {
     public UnRegisterCommand(short optcode, int CourseNumber) {
@@ -9,6 +11,12 @@ public class UnRegisterCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        return null;
+        User thisUser = database.getUserHashMap().get(protocol.getUserName());
+        if(thisUser.isRegister(CourseNumber)&&!thisUser.isAdmin()){
+            thisUser.deleteCourse(CourseNumber);
+            database.getCourseHashMap().get(CourseNumber).setOneMoreSpot();
+            return null;//ACK
+        }
+        return null;//ERR
     }
 }

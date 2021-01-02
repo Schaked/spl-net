@@ -34,6 +34,9 @@ public class User {
     public void setCourse(Integer course){
         coursesReg.add(course);
     }
+    public void deleteCourse(Integer course){
+        coursesReg.remove(course);
+    }
     public boolean isRegister(Integer course){
         return coursesReg.contains(course);
     }
@@ -43,5 +46,9 @@ public class User {
     }
     public LinkedList<Integer> getRegList(){
         return coursesReg;
+    }
+
+    public boolean isAdmin(){
+        return this.isAdmin;
     }
 }

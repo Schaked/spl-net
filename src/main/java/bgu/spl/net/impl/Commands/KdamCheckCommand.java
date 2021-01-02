@@ -10,7 +10,7 @@ public class KdamCheckCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        User thisUser = database.getUserHashMap().get(userName);
+        User thisUser = database.getUserHashMap().get(protocol.getUserName());
         if(thisUser.isLogin()){
            return thisUser.getRegList();
         }
