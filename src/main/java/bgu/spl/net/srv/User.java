@@ -34,11 +34,14 @@ public class User {
     public void setCourse(Integer course){
         coursesReg.add(course);
     }
-    public void isRegister(Integer course){
-        coursesReg.contains(course);
+    public boolean isRegister(Integer course){
+        return coursesReg.contains(course);
     }
 
     public String getPassword() {
         return password;
+    }
+    public LinkedList<Integer> getRegList(){
+        return coursesReg;
     }
 }
