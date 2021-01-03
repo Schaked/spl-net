@@ -15,8 +15,8 @@ public class UnRegisterCommand extends Command {
         if(thisUser.isRegister(CourseNumber)&&!thisUser.isAdmin()){
             thisUser.deleteCourse(CourseNumber);
             database.getCourseHashMap().get(CourseNumber).setOneMoreSpot();
-            return null;//ACK
+            return new AckCommand(optcode);
         }
-        return null;//ERR
+        return new ErrorCommand(optcode);
     }
 }

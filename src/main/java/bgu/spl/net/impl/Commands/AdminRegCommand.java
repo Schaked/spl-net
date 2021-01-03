@@ -15,10 +15,10 @@ public class AdminRegCommand extends Command {
         if(!database.getUserHashMap().containsKey(userName)){
             database.getUserHashMap().put(userName,new User(userName, password));
             database.getUserHashMap().get(userName).setAdmin(true);
-            return null;//Ack
+            return new AckCommand(optcode);
         }
         else{
-            return null;//Error
+            return new ErrorCommand(optcode);
         }
     }
 }

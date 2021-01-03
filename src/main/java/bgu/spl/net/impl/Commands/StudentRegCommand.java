@@ -13,10 +13,10 @@ public class StudentRegCommand extends Command {
     public Command execute(BgrsProtocol protocol) {
         if(!database.getUserHashMap().containsKey(userName)){
             database.getUserHashMap().put(userName,new User(userName, password));
-            return null;//Ack
+            return new AckCommand(optcode);
         }
         else{
-            return null;//Error
+            return new ErrorCommand(optcode);
         }
     }
 }

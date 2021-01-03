@@ -13,10 +13,10 @@ public class LoginCommand extends Command{
         if((database.getUserHashMap().containsKey(userName)) && password.equals(database.getUserHashMap().get(userName).getPassword()) && !database.getUserHashMap().get(userName).isLogin()){
             database.getUserHashMap().get(userName).setLogin(true);
             protocol.setUserName(userName);
-            return null; //Ack
+            return new AckCommand(optcode);
         }
         else{
-            return null; //Error
+            return new ErrorCommand(optcode);
         }
     }
 }

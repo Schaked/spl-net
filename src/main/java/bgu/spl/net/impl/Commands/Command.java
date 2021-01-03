@@ -28,5 +28,17 @@ public abstract class Command {
         this.userName=userName;
         this.optcode=optcode;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getCourseNumber() {
+        return CourseNumber;
+    }
+
+    public short getOptcode() {
+        return optcode;
+    }
 }
 

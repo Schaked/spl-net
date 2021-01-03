@@ -13,9 +13,10 @@ public class MyCoursesCommand extends Command {
     public Command execute(BgrsProtocol protocol) {
         User thisUser = database.getUserHashMap().get(protocol.getUserName());
         if(thisUser.isLogin()&&!thisUser.isAdmin()){
-//            return thisUser.getRegList();//return ACK and registered list
-            return null;
+            return new AckCommand(protocol.getUserName(), optcode);
         }
-        return null;//return empty string
+        else{
+            return new ErrorCommand(optcode);
+        }
     }
 }

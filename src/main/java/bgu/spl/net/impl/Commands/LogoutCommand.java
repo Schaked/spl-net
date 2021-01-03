@@ -14,10 +14,10 @@ public class LogoutCommand extends Command {
         if(!userName.isEmpty()){
             database.getUserHashMap().remove(userName);
             protocol.setShouldTerminate(true);
-            return null; //Ack
+            return new AckCommand(optcode);
         }
         else{
-            return null; //Error
+            return new ErrorCommand(optcode);
         }
     }
 }

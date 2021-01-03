@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
+import bgu.spl.net.srv.User;
 
 public class CourseStatCommand extends Command {
     public CourseStatCommand(short optcode, int CourseNumber) {
@@ -9,6 +10,12 @@ public class CourseStatCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        return null;
+        User thisUser=database.getUserHashMap().get(protocol.getUserName());
+        if(thisUser.isAdmin()){
+            return new AckCommand(optcode,CourseNumber);
+        }
+        else{
+            return new ErrorCommand(optcode);
+        }
     }
 }

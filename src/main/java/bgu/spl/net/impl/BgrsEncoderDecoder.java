@@ -111,7 +111,23 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
 
     @Override
     public byte[] encode(Command message) {
-        return new byte[0];
+        if(message instanceof ErrorCommand){
+            return ("Error "+optcode).getBytes();
+        }
+        else{
+            switch (message.getOptcode()){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 10:
+                    return ("Ack "+message.getOptcode()).getBytes();
+                case 6:
+                    return ("Ack "+message.getOptcode()+"\n").getBytes();
+            }
+        }
+        return null;
     }
 
     private void pushByte(byte nextByte) {

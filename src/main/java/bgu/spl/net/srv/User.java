@@ -9,7 +9,7 @@ public class User {
     private String password;
     private boolean isAdmin;
     private boolean isLogin;
-    protected LinkedList<Integer> coursesReg;
+    private LinkedList<Integer> coursesReg;
 
     public User (String userName, String password){
         this.userName=userName;

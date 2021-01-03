@@ -24,11 +24,11 @@ public class CourseRegCommand extends Command {
     public Command execute(BgrsProtocol protocol) {
 
         if((!database.getCourseHashMap().containsKey(CourseNumber))||(database.getCourseHashMap().get(CourseNumber).getAvailableSpots()<=0)||(!database.getUserHashMap().get(protocol.getUserName()).isLogin())||(!this.KDAMIsOk())){
-            return null;//Err
+            return new ErrorCommand(optcode);
         } else {
             database.getUserHashMap().get(protocol.getUserName()).setCourse(CourseNumber);
             database.getCourseHashMap().get(CourseNumber).setOneLessSpot();
-            return null;//Ack
+            return null;
         }
     }
 }

@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
+import bgu.spl.net.srv.User;
 
 public class StudentStatCommand extends Command {
 
@@ -10,6 +11,12 @@ public class StudentStatCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        return null;
+        User thisUser=database.getUserHashMap().get(protocol.getUserName());
+        if(thisUser.isAdmin()){
+            return new AckCommand(userName,optcode);
+        }
+        else{
+            return new ErrorCommand(optcode);
+        }
     }
 }
