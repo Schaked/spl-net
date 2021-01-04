@@ -148,7 +148,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                     return ("ACK "+message.getOptcode()+"\n"+isRegistered+'\0').getBytes();
                 case 11://MyCourses
                     String registeredTo = user.getRegList().toString();
-                    return ("ACK "+registeredTo+'\0').getBytes();
+                    return ("ACK "+message.getOptcode()+"\n"+registeredTo+'\0').getBytes();
             }
         }
         return null;
