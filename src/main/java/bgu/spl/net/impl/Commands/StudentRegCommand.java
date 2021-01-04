@@ -3,7 +3,7 @@ package bgu.spl.net.impl.Commands;
 import bgu.spl.net.impl.BgrsProtocol;
 import bgu.spl.net.srv.User;
 
-public class StudentRegCommand extends Command {
+public class StudentRegCommand extends Command  {
 
     public StudentRegCommand(String userName, String password, short optcode) {
         super(userName, password, optcode);

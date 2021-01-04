@@ -3,7 +3,7 @@ package bgu.spl.net.impl.Commands;
 import bgu.spl.net.impl.BgrsProtocol;
 import bgu.spl.net.srv.User;
 
-public class MyCoursesCommand extends Command {
+public class MyCoursesCommand extends Command{
 
     public MyCoursesCommand(short optcode) {
         super(optcode);

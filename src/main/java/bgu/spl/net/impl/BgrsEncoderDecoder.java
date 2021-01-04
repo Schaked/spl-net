@@ -2,9 +2,13 @@ package bgu.spl.net.impl;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.impl.Commands.*;
+import bgu.spl.net.srv.Course;
+import bgu.spl.net.srv.Database;
+import bgu.spl.net.srv.User;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     private byte[] bytes = new byte[1 << 10]; //start with 1k
@@ -111,8 +115,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
 
     @Override
     public byte[] encode(Command message) {
+        Course course=Database.getInstance().getCourseHashMap().get(message.getCourseNumber());
+        User user=Database.getInstance().getUserHashMap().get(message.getUserName());
         if(message instanceof ErrorCommand){
-            return ("Error "+optcode).getBytes();
+            return ("Error "+optcode+'\0').getBytes();
         }
         else{
             switch (message.getOptcode()){
@@ -122,9 +128,14 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 4:
                 case 5:
                 case 10:
-                    return ("Ack "+message.getOptcode()).getBytes();
+                    return ("Ack "+message.getOptcode()+'\0').getBytes();
                 case 6:
-                    return ("Ack "+message.getOptcode()+"\n").getBytes();
+                    return ("Ack "+message.getOptcode()+"\n"+ Arrays.toString(course.getKdamCoursesList())+'\0').getBytes();
+                case 7:
+                    String Course="Course: ("+message.getCourseNumber()+") "+course.getCourseName();
+                    String Seats_Available="Seats Available: "+course.getAvailableSpots()+"/"+course.getNumOfMaxStudent();
+                    String Students_Registered="Student Registered: "+ course.getStudentRegToCourse().toString();
+                    return ("Ack "+message.getOptcode()+"\n"+Course+"\n"+Seats_Available+"\n"+Students_Registered+'\0').getBytes();
             }
         }
         return null;

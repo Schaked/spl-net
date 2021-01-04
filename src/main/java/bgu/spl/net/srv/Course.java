@@ -37,8 +37,13 @@ public class Course {
         this.availableSpots = this.availableSpots+1;
     }
 
+
     public LinkedList<String> getStudentRegToCourse() {
         return studentRegToCourse;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     public void addStudentToCourse(String userName) {

@@ -4,7 +4,7 @@ import bgu.spl.net.impl.BgrsProtocol;
 import bgu.spl.net.srv.Database;
 import bgu.spl.net.srv.User;
 
-public class UnRegisterCommand extends Command {
+public class UnRegisterCommand extends Command{
     public UnRegisterCommand(short optcode, int CourseNumber) {
         super(optcode, CourseNumber);
     }
