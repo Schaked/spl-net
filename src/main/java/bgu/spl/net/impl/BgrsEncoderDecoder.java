@@ -122,12 +122,12 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
         }
         else{
             switch (message.getOptcode()){
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 10://
+                case 1://AdminReg
+                case 2://StudentReg
+                case 3://Login
+                case 4://Logout
+                case 5://CourseReg
+                case 10://UnRegistered
                     return ("ACK "+message.getOptcode()+'\0').getBytes();
                 case 6://KdamCheck
                     return ("ACK "+message.getOptcode()+"\n"+ Arrays.toString(course.getKdamCoursesList())+'\0').getBytes();
