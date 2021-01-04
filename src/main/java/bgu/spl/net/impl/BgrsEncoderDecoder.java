@@ -127,15 +127,28 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 3:
                 case 4:
                 case 5:
-                case 10:
-                    return ("Ack "+message.getOptcode()+'\0').getBytes();
-                case 6:
-                    return ("Ack "+message.getOptcode()+"\n"+ Arrays.toString(course.getKdamCoursesList())+'\0').getBytes();
-                case 7:
+                case 10://
+                    return ("ACK "+message.getOptcode()+'\0').getBytes();
+                case 6://KdamCheck
+                    return ("ACK "+message.getOptcode()+"\n"+ Arrays.toString(course.getKdamCoursesList())+'\0').getBytes();
+                case 7://CourseStat
                     String Course="Course: ("+message.getCourseNumber()+") "+course.getCourseName();
                     String Seats_Available="Seats Available: "+course.getAvailableSpots()+"/"+course.getNumOfMaxStudent();
                     String Students_Registered="Student Registered: "+ course.getStudentRegToCourse().toString();
-                    return ("Ack "+message.getOptcode()+"\n"+Course+"\n"+Seats_Available+"\n"+Students_Registered+'\0').getBytes();
+                    return ("ACK "+message.getOptcode()+"\n"+Course+"\n"+Seats_Available+"\n"+Students_Registered+'\0').getBytes();
+                case 8://StudentStat
+                    String Student = "Student: "+message.getUserName();
+                    String Courses = "Courses "+user.getRegList().toString();
+                    return ("ACK "+message.getOptcode()+"\n"+Student+"\n"+Courses+'\0').getBytes();
+                case 9://IsRegistered
+                    String isRegistered = "NOT REGISTERED";
+                    if(user.isRegister(message.getCourseNumber())){
+                        isRegistered = "REGISTERED";
+                    }
+                    return ("ACK "+message.getOptcode()+"\n"+isRegistered+'\0').getBytes();
+                case 11://MyCourses
+                    String registeredTo = user.getRegList().toString();
+                    return ("ACK "+registeredTo+'\0').getBytes();
             }
         }
         return null;
