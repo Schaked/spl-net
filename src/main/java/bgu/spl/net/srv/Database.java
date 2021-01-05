@@ -25,6 +25,7 @@ public class Database {
 	private Database() {
 		userHashMap=new HashMap<>();
 		courseHashMap=new HashMap<>();
+		initialize("/home/spl211/IdeaProjects/spl-net/Courses.txt");
 
 	}
 	private static class SingletonHolder{
@@ -53,13 +54,12 @@ public class Database {
 					kdamCourses = Stream.of(data[2].substring(1, data[2].length() - 1).split(",")).mapToInt(Integer::parseInt).toArray();
 				}
 				courseHashMap.put(Integer.parseInt(data[0]),new Course(Integer.parseInt(data[0]),data[1],kdamCourses,Integer.parseInt(data[3])));
-				return true;
 			}
 		}
 		catch (FileNotFoundException ex){
 			ex.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
 	public HashMap<String, User> getUserHashMap() {

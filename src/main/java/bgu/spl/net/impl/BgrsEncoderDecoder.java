@@ -13,21 +13,22 @@ import java.util.Collections;
 public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
-    private int courseNumber;
-    private short optcode;
-    private Command command;
+    private int courseNumber=-1;
+    private short optcode=0;
+    private Command command=null;
     private String userName=null;
     private String password=null;
     private boolean isDoneDecoding=false;
 
     @Override
     public Command decodeNextByte(byte nextByte) {
+        if (len==0){
+            command=null;
+        }
         if(len<2){
             pushByte(nextByte);
             if(len==2){
                 optcode=bytesToShort(Arrays.copyOfRange(bytes,0,2));
-                command=null;
-                len=0;
             }
         }
         else {
@@ -58,9 +59,17 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
             }
             if(isDoneDecoding){
                 command=getCommand(optcode);
+                reset();
             }
         }
         return command;
+    }
+    public void reset(){
+        len=0;
+        userName=null;
+        password=null;
+        courseNumber=-1;
+        isDoneDecoding=false;
     }
 
     public boolean decodeUserNameAndPasswordType(byte nextByte){
@@ -69,12 +78,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
         }
         else{
             if(userName==null){
-                userName=new String(bytes,0,len,StandardCharsets.UTF_8);
-                len=0;
+                userName=new String(bytes,2,len,StandardCharsets.UTF_8);
             }
             else{
-                password=new String(bytes,0,len,StandardCharsets.UTF_8);
-                len=0;
+                password=new String(bytes,userName.length(),len,StandardCharsets.UTF_8);
             }
         }
         return userName!=null && password!=null;
@@ -128,7 +135,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 4://Logout
                 case 5://CourseReg
                 case 10://UnRegistered
-                    return ("ACK "+message.getOptcode()+'\0').getBytes();
+                    return ("ACK "+message.getOptcode()+'\0').getBytes(StandardCharsets.UTF_8);
                 case 6://KdamCheck
                     return ("ACK "+message.getOptcode()+"\n"+ Arrays.toString(course.getKdamCoursesList())+'\0').getBytes();
                 case 7://CourseStat
