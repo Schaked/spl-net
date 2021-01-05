@@ -19,6 +19,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     private String userName=null;
     private String password=null;
     private boolean isDoneDecoding=false;
+    int temp;
 
     @Override
     public Command decodeNextByte(byte nextByte) {
@@ -28,7 +29,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
         if(len<2){
             pushByte(nextByte);
             if(len==2){
-                optcode=bytesToShort(Arrays.copyOfRange(bytes,0,2));
+                optcode=bytesToShort(Arrays.copyOfRange(bytes,0,2),0);
             }
         }
         else {
@@ -49,7 +50,8 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 7:
                 case 9:
                 case 10:
-                    courseNumber = decodeCourseNumberType(bytes);
+                    courseNumber=bytesToShort(bytes,len-2);
+//                    courseNumber = decodeCourseNumberType(bytes);
                     isDoneDecoding=true;
                     break;
                 case 8:
@@ -78,10 +80,11 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
         }
         else{
             if(userName==null){
-                userName=new String(bytes,2,len,StandardCharsets.UTF_8);
+                userName=new String(bytes,2,len-2,StandardCharsets.UTF_8);
+                temp=len;
             }
             else{
-                password=new String(bytes,userName.length(),len,StandardCharsets.UTF_8);
+                password=new String(bytes,userName.length()+2,len-temp,StandardCharsets.UTF_8);
             }
         }
         return userName!=null && password!=null;
@@ -167,10 +170,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
         }
         bytes[len++] = nextByte;
     }
-    public short bytesToShort(byte[] byteArr)
+    public short bytesToShort(byte[] byteArr, int len)
     {
-        short result = (short)((byteArr[0] & 0xff) << 8);
-        result += (short)(byteArr[1] & 0xff);
+        short result = (short)((byteArr[len] & 0xff) << 8);
+        result += (short)(byteArr[len+1] & 0xff);
         return result;
     }
 }
