@@ -4,6 +4,7 @@ import bgu.spl.net.api.MessagingProtocol;
 import bgu.spl.net.impl.Commands.Command;
 
 public class BgrsProtocol implements MessagingProtocol<Command> {
+
     private boolean shouldTerminate=false;
     private String userName="";
     @Override

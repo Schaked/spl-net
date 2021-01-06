@@ -29,6 +29,12 @@ public abstract class Command {
         this.optcode=optcode;
     }
 
+    public Command(short optcode, int CourseNumber, String userName){
+        this.optcode=optcode;
+        this.CourseNumber=CourseNumber;
+        this.userName=userName;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -40,5 +46,9 @@ public abstract class Command {
     public short getOptcode() {
         return optcode;
     }
+
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
 }
 

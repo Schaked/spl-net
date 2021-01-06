@@ -11,9 +11,15 @@ public class IsRegisteredCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        User thisUser = database.getUserHashMap().get(protocol.getUserName());
-        if(!thisUser.isAdmin()){
-            return new AckCommand(optcode,CourseNumber);
+        boolean userExists=database.getUserHashMap().containsKey(protocol.getUserName());
+        if(userExists){
+            User thisUser = database.getUserHashMap().get(protocol.getUserName());
+            if(!thisUser.isAdmin()){
+                return new AckCommand(optcode,CourseNumber,protocol.getUserName());
+            }
+            else{
+                return new ErrorCommand(optcode);
+            }
         }
         else{
             return new ErrorCommand(optcode);

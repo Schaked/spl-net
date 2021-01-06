@@ -11,6 +11,10 @@ public class AckCommand extends Command{
         super(optcode,courseNumber);
     }
 
+    public AckCommand(short optcode, int CourseNumber, String userName){
+        super(optcode,CourseNumber,userName);
+    }
+
     public AckCommand(String userName, short optcode){
         super(userName, optcode);
     }

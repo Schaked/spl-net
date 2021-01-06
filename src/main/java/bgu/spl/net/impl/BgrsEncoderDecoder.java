@@ -134,12 +134,12 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
 
     @Override
     public byte[] encode(Command message) {
-        Course course=Database.getInstance().getCourseHashMap().get(message.getCourseNumber());
-        User user=Database.getInstance().getUserHashMap().get(message.getUserName());
         if(message instanceof ErrorCommand){
             return ("Error "+optcode+'\0').getBytes();
         }
         else{
+            Course course=Database.getInstance().getCourseHashMap().get(message.getCourseNumber());
+            User user=Database.getInstance().getUserHashMap().get(message.getUserName());
             switch (message.getOptcode()){
                 case 1://AdminReg
                 case 2://StudentReg

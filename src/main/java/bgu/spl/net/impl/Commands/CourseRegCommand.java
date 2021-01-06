@@ -23,16 +23,30 @@ public class CourseRegCommand extends Command {
     @Override
     public Command execute(BgrsProtocol protocol) {
         boolean courseExists=database.getCourseHashMap().containsKey(CourseNumber);
-        boolean isRegisterToCourse=database.getUserHashMap().get(protocol.getUserName()).isRegister(CourseNumber);
-        boolean courseAvailable=database.getCourseHashMap().get(CourseNumber).getAvailableSpots()<=0;
-        boolean isLogin=database.getUserHashMap().get(protocol.getUserName()).isLogin();
-        boolean hasAllKdamCourses=KDAMIsOk(protocol.getUserName());
-        if((!courseExists || isRegisterToCourse || courseAvailable ||!isLogin||!hasAllKdamCourses)){
-            return new ErrorCommand(optcode);
-        } else {
-            database.getUserHashMap().get(protocol.getUserName()).setCourse(CourseNumber);
-            database.getCourseHashMap().get(CourseNumber).setOneLessSpot();
-            return new AckCommand(optcode);
+        boolean userExists=database.getUserHashMap().containsKey(protocol.getUserName());
+        if(courseExists && userExists){
+            boolean isRegisterToCourse=database.getUserHashMap().get(protocol.getUserName()).isRegister(CourseNumber);
+            boolean courseAvailable=database.getCourseHashMap().get(CourseNumber).getAvailableSpots()>0;
+            boolean isLogin=database.getUserHashMap().get(protocol.getUserName()).isLogin();
+            boolean hasAllKdamCourses=KDAMIsOk(protocol.getUserName());
+            if(!isRegisterToCourse && courseAvailable && isLogin && hasAllKdamCourses){
+                User user=database.getUserHashMap().get(protocol.getUserName());
+                user.setCourse(CourseNumber);
+                return new AckCommand(optcode);
+            }
+            else{
+                return new ErrorCommand(optcode);
+            }
         }
+        else{
+            return new ErrorCommand(optcode);
+        }
+//        if((!database.getCourseHashMap().containsKey(CourseNumber) ||!database.getUserHashMap().get(protocol.getUserName()).isLogin() || database.getUserHashMap().get(protocol.getUserName()).isRegister(CourseNumber) || database.getCourseHashMap().get(CourseNumber).getAvailableSpots()<=0 ||!KDAMIsOk(protocol.getUserName()))){
+//            return new ErrorCommand(optcode);
+//        } else {
+//            database.getUserHashMap().get(protocol.getUserName()).setCourse(CourseNumber);
+//            database.getCourseHashMap().get(CourseNumber).setOneLessSpot();
+//            return new AckCommand(optcode);
+//        }
     }
 }
