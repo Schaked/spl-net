@@ -16,7 +16,7 @@ public class User {
         this.password=password;
         isAdmin=false;
         isLogin=false;
-        this.coursesReg = null;
+        this.coursesReg = new LinkedList<>();
     }
 
     public boolean isLogin() {

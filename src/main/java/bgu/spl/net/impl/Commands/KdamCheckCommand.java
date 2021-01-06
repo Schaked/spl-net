@@ -13,12 +13,18 @@ public class KdamCheckCommand extends Command {
     @Override
     public Command execute(BgrsProtocol protocol) {
         Course thisCourse = database.getCourseHashMap().get(CourseNumber);
-        User thisUser=database.getUserHashMap().get(protocol.getUserName());
-        if(thisUser.isAdmin()){
+        if(protocol.getUserName().isEmpty() || database.getUserHashMap().get(protocol.getUserName()).isAdmin()){
             return new ErrorCommand(optcode);
         }
         else{
             return new AckCommand(optcode,CourseNumber);
         }
+//        User thisUser=database.getUserHashMap().get(protocol.getUserName());
+//        if(thisUser.isAdmin()){
+//            return new ErrorCommand(optcode);
+//        }
+//        else{
+//            return new AckCommand(optcode,CourseNumber);
+//        }
     }
 }

@@ -50,9 +50,15 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 7:
                 case 9:
                 case 10:
-                    courseNumber=bytesToShort(bytes,len-2);
-//                    courseNumber = decodeCourseNumberType(bytes);
-                    isDoneDecoding=true;
+                    if(nextByte=='\0'){
+                        pushByte(nextByte);
+                    }
+                    else{
+                        pushByte(nextByte);
+                        courseNumber=decodeCourseNumberType(bytes);
+//                        courseNumber = bytesToShort(bytes,len-2);
+                        isDoneDecoding=true;
+                    }
                     break;
                 case 8:
                     if(decodeUserNameType(nextByte)){
@@ -91,7 +97,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     }
 
     public int decodeCourseNumberType(byte[] bytes){
-        return ((bytes[len] & 0xff) << 8) | (bytes[len+1] & 0xff);
+//        int result = ((bytes[len] & 0xff) << 8);
+//        result += (short)(byteArr[len+1] & 0xff);
+//        return result;
+        return ((bytes[len-2] & 0xff) << 8) | (bytes[len-1] & 0xff);
     }
 
     public boolean decodeUserNameType(byte nextByte){
@@ -138,9 +147,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 4://Logout
                 case 5://CourseReg
                 case 10://UnRegistered
-                    return ("ACK "+message.getOptcode()+'\0').getBytes(StandardCharsets.UTF_8);
+                    return ("ACK "+message.getOptcode()+'\0').getBytes();
                 case 6://KdamCheck
-                    return ("ACK "+message.getOptcode()+"\n"+ Arrays.toString(course.getKdamCoursesList())+'\0').getBytes();
+                    String kdamCoursesList=Arrays.toString(course.getKdamCoursesList()).replace(", ",",");
+                    return ("ACK "+message.getOptcode()+"\n"+ kdamCoursesList+'\0').getBytes();
                 case 7://CourseStat
                     String Course="Course: ("+message.getCourseNumber()+") "+course.getCourseName();
                     String Seats_Available="Seats Available: "+course.getAvailableSpots()+"/"+course.getNumOfMaxStudent();

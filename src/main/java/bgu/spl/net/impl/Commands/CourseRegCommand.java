@@ -28,7 +28,7 @@ public class CourseRegCommand extends Command {
         } else {
             database.getUserHashMap().get(protocol.getUserName()).setCourse(CourseNumber);
             database.getCourseHashMap().get(CourseNumber).setOneLessSpot();
-            return null;
+            return new AckCommand(optcode);
         }
     }
 }
