@@ -10,7 +10,7 @@ public class CourseRegCommand extends Command {
     public CourseRegCommand(short optcode, int CourseNumber) {
         super(optcode, CourseNumber);
     }
-    public boolean KDAMIsOk(){
+    public boolean KDAMIsOk(String userName){
         int[] kdamArr = database.getCourseHashMap().get(CourseNumber).getKdamCoursesList();
         User thisUser = database.getUserHashMap().get(userName);
         for(int i = 0; i<kdamArr.length;i++){
@@ -22,8 +22,12 @@ public class CourseRegCommand extends Command {
     }
     @Override
     public Command execute(BgrsProtocol protocol) {
-
-        if((!database.getCourseHashMap().containsKey(CourseNumber))||(database.getCourseHashMap().get(CourseNumber).getAvailableSpots()<=0)||(!database.getUserHashMap().get(protocol.getUserName()).isLogin())||(!this.KDAMIsOk())){
+        boolean courseExists=database.getCourseHashMap().containsKey(CourseNumber);
+        boolean isRegisterToCourse=database.getUserHashMap().get(protocol.getUserName()).isRegister(CourseNumber);
+        boolean courseAvailable=database.getCourseHashMap().get(CourseNumber).getAvailableSpots()<=0;
+        boolean isLogin=database.getUserHashMap().get(protocol.getUserName()).isLogin();
+        boolean hasAllKdamCourses=KDAMIsOk(protocol.getUserName());
+        if((!courseExists || isRegisterToCourse || courseAvailable ||!isLogin||!hasAllKdamCourses)){
             return new ErrorCommand(optcode);
         } else {
             database.getUserHashMap().get(protocol.getUserName()).setCourse(CourseNumber);
