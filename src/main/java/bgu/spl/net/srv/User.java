@@ -43,6 +43,7 @@ public class User {
         if(!isEntered){
             coursesReg.add(course);
         }
+        database.getCourseHashMap().get(course).setOneLessSpot();
     }
     public void deleteCourse(Integer course){
         coursesReg.remove(course);

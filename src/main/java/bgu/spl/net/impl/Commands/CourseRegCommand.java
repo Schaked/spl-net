@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.Commands;
 
 import bgu.spl.net.impl.BgrsProtocol;
+import bgu.spl.net.srv.Course;
 import bgu.spl.net.srv.User;
 
 
@@ -32,7 +33,9 @@ public class CourseRegCommand extends Command {
             boolean isAdmin=database.getUserHashMap().get(protocol.getUserName()).isAdmin();
             if(!isRegisterToCourse && courseAvailable && isLogin && hasAllKdamCourses && !isAdmin){
                 User user=database.getUserHashMap().get(protocol.getUserName());
+                Course course=database.getCourseHashMap().get(CourseNumber);
                 user.setCourse(CourseNumber);
+                course.addStudentToCourse(protocol.getUserName());
                 return new AckCommand(optcode);
             }
             else{

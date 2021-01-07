@@ -10,7 +10,9 @@ public class CourseStatCommand extends Command{
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        if(database.getUserHashMap().containsKey(protocol.getUserName())){
+        boolean userExists=database.getUserHashMap().containsKey(protocol.getUserName());
+        boolean courseExists=database.getCourseHashMap().containsKey(CourseNumber);
+        if(userExists && courseExists){
             User thisUser=database.getUserHashMap().get(protocol.getUserName());
             if(thisUser.isAdmin()){
                 return new AckCommand(optcode,CourseNumber);

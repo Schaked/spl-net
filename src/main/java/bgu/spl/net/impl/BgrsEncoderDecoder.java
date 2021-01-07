@@ -19,10 +19,11 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     private String userName=null;
     private String password=null;
     private boolean isDoneDecoding=false;
-    int temp;
+    private int countZero=0;//To check if the course number is 0
+    int lenUserName;
 
     @Override
-    public Command decodeNextByte(byte nextByte) {
+    public synchronized Command decodeNextByte(byte nextByte) {
         if (len==0){
             command=null;
         }
@@ -51,7 +52,14 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 9:
                 case 10:
                     if(nextByte=='\0'){
-                        pushByte(nextByte);
+                        countZero=countZero+1;
+                        if(countZero==2){
+                            courseNumber=0;
+                            isDoneDecoding=true;
+                        }
+                        else{
+                            pushByte(nextByte);
+                        }
                     }
                     else{
                         pushByte(nextByte);
@@ -74,9 +82,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     }
     public void reset(){
         len=0;
+        countZero=0;
+        courseNumber=-1;
         userName=null;
         password=null;
-        courseNumber=-1;
         isDoneDecoding=false;
     }
 
@@ -87,10 +96,10 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
         else{
             if(userName==null){
                 userName=new String(bytes,2,len-2,StandardCharsets.UTF_8);
-                temp=len;
+                lenUserName=len;
             }
             else{
-                password=new String(bytes,userName.length()+2,len-temp,StandardCharsets.UTF_8);
+                password=new String(bytes,userName.length()+2,len-lenUserName,StandardCharsets.UTF_8);
             }
         }
         return userName!=null && password!=null;
@@ -108,8 +117,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
             pushByte(nextByte);
         }
         else{
-            userName=new String(bytes,0,len,StandardCharsets.UTF_8);
-            len=0;
+            userName=new String(bytes,2,len-2,StandardCharsets.UTF_8);
         }
         return userName!=null;
     }
@@ -135,11 +143,11 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
     @Override
     public byte[] encode(Command message) {
         if(message instanceof ErrorCommand){
-            return ("Error "+optcode+'\0').getBytes();
+            return ("ERROR "+optcode+'\0').getBytes();
         }
         else{
-            Course course=Database.getInstance().getCourseHashMap().get(message.getCourseNumber());
-            User user=Database.getInstance().getUserHashMap().get(message.getUserName());
+            Course course;
+            User user;
             switch (message.getOptcode()){
                 case 1://AdminReg
                 case 2://StudentReg
@@ -149,25 +157,30 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 10://UnRegister
                     return ("ACK "+message.getOptcode()+'\0').getBytes();
                 case 6://KdamCheck
+                    course=Database.getInstance().getCourseHashMap().get(message.getCourseNumber());
                     String kdamCoursesList=Arrays.toString(course.getKdamCoursesList()).replace(", ",",");
                     return ("ACK "+message.getOptcode()+"\n"+ kdamCoursesList+'\0').getBytes();
                 case 7://CourseStat
+                    course=Database.getInstance().getCourseHashMap().get(message.getCourseNumber());
                     String Course="Course: ("+message.getCourseNumber()+") "+course.getCourseName();
                     String Seats_Available="Seats Available: "+course.getAvailableSpots()+"/"+course.getNumOfMaxStudent();
-                    String Students_Registered="Student Registered: "+ course.getStudentRegToCourse().toString();
+                    String Students_Registered="Students Registered: "+ course.getStudentRegToCourse().toString();
                     return ("ACK "+message.getOptcode()+"\n"+Course+"\n"+Seats_Available+"\n"+Students_Registered+'\0').getBytes();
                 case 8://StudentStat
+                    user=Database.getInstance().getUserHashMap().get(message.getUserName());
                     String Student = "Student: "+message.getUserName();
-                    String Courses = "Courses: "+user.getRegList().toString();
+                    String Courses = "Courses: "+user.getRegList().toString().replace(", ",",");
                     return ("ACK "+message.getOptcode()+"\n"+Student+"\n"+Courses+'\0').getBytes();
                 case 9://IsRegistered
+                    user=Database.getInstance().getUserHashMap().get(message.getUserName());
                     String isRegistered = "NOT REGISTERED";
                     if(user.isRegister(message.getCourseNumber())){
                         isRegistered = "REGISTERED";
                     }
                     return ("ACK "+message.getOptcode()+"\n"+isRegistered+'\0').getBytes();
                 case 11://MyCourses
-                    String registeredTo = user.getRegList().toString();
+                    user=Database.getInstance().getUserHashMap().get(message.getUserName());
+                    String registeredTo = user.getRegList().toString().replace(", ",",");
                     return ("ACK "+message.getOptcode()+"\n"+registeredTo+'\0').getBytes();
             }
         }

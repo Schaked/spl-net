@@ -10,7 +10,7 @@ public class StudentRegCommand extends Command  {
     }
 
     @Override
-    public Command execute(BgrsProtocol protocol) {
+    public synchronized Command execute(BgrsProtocol protocol) {
         if(!database.getUserHashMap().containsKey(userName)){
             database.getUserHashMap().put(userName,new User(userName, password));
             return new AckCommand(optcode);

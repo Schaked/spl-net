@@ -12,7 +12,7 @@ public class LogoutCommand extends Command {
     public Command execute(BgrsProtocol protocol) {
         String userName=protocol.getUserName();
         if(!userName.isEmpty()){
-            database.getUserHashMap().remove(userName);
+            database.getUserHashMap().get(userName).setLogin(false);
             protocol.setShouldTerminate(true);
             return new AckCommand(optcode);
         }

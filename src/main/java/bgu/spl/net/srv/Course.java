@@ -46,8 +46,9 @@ public class Course {
         return courseName;
     }
 
-    public void addStudentToCourse(String userName) {
+    public synchronized void addStudentToCourse(String userName) {
         studentRegToCourse.add(userName);
-        Collections.sort(studentRegToCourse); //Sort the list alphabetically
+        Collections.sort(studentRegToCourse);
     }
+
 }

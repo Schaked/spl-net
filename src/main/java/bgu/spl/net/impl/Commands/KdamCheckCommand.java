@@ -12,8 +12,9 @@ public class KdamCheckCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        Course thisCourse = database.getCourseHashMap().get(CourseNumber);
-        if(protocol.getUserName().isEmpty() || database.getUserHashMap().get(protocol.getUserName()).isAdmin()){
+        boolean courseExists=database.getCourseHashMap().containsKey(CourseNumber);
+        boolean userLoggedIn=!protocol.getUserName().isEmpty();
+        if(!userLoggedIn || database.getUserHashMap().get(protocol.getUserName()).isAdmin() || !courseExists){
             return new ErrorCommand(optcode);
         }
         else{

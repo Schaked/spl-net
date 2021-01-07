@@ -11,9 +11,15 @@ public class StudentStatCommand extends Command {
 
     @Override
     public Command execute(BgrsProtocol protocol) {
-        User thisUser=database.getUserHashMap().get(protocol.getUserName());
-        if(thisUser.isAdmin()){
-            return new AckCommand(userName,optcode);
+//        User studentUser=database.getUserHashMap().get(userName);
+        if(database.getUserHashMap().containsKey(protocol.getUserName())){
+            User user=database.getUserHashMap().get(protocol.getUserName());
+            if(user.isAdmin()){
+                return new AckCommand(userName,optcode);
+            }
+            else{
+                return new ErrorCommand(optcode);
+            }
         }
         else{
             return new ErrorCommand(optcode);

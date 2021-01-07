@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 /**
@@ -16,18 +17,18 @@ import java.util.stream.Stream;
  * You can add private fields and methods to this class as you see fit.
  */
 public class Database {
-	private HashMap<String, User> userHashMap;
-	private HashMap<Integer, Course> courseHashMap;
-	private HashMap<Integer, Integer> coursesPlaceAtTheCourseFile;
+	private ConcurrentHashMap<String, User> userHashMap;
+	private ConcurrentHashMap<Integer, Course> courseHashMap;
+	private ConcurrentHashMap<Integer, Integer> coursesPlaceAtTheCourseFile;
 	int count;
 
 
 
 	//to prevent user from creating new Database
 	private Database() {
-		userHashMap=new HashMap<>();
-		courseHashMap=new HashMap<>();
-		coursesPlaceAtTheCourseFile=new HashMap<>();
+		userHashMap=new ConcurrentHashMap<>();
+		courseHashMap=new ConcurrentHashMap<>();
+		coursesPlaceAtTheCourseFile=new ConcurrentHashMap<>();
 		count=1;
 		initialize("/home/spl211/IdeaProjects/spl-net/Courses.txt");
 
@@ -61,22 +62,23 @@ public class Database {
 				coursesPlaceAtTheCourseFile.put(Integer.parseInt(data[0]),count);
 				count=count+1;
 			}
+			return true;
 		}
 		catch (FileNotFoundException ex){
 			ex.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 
-	public HashMap<String, User> getUserHashMap() {
+	public ConcurrentHashMap<String, User> getUserHashMap() {
 		return userHashMap;
 	}
 
-	public HashMap<Integer, Course> getCourseHashMap() {
+	public ConcurrentHashMap<Integer, Course> getCourseHashMap() {
 		return courseHashMap;
 	}
 
-	public HashMap<Integer, Integer> getCoursesPlaceAtTheCourseFile() {
+	public ConcurrentHashMap<Integer, Integer> getCoursesPlaceAtTheCourseFile() {
 		return coursesPlaceAtTheCourseFile;
 	}
 }
