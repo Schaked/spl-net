@@ -31,8 +31,18 @@ public class User {
         isAdmin = admin;
     }
 
-    public void setCourse(Integer course){
-        coursesReg.add(course);
+    public void setCourse(Integer course) {
+        boolean isEntered=false;
+        Database database=Database.getInstance();
+        for(int i=0; i<coursesReg.size()&&!isEntered; i++){
+            if(database.getCoursesPlaceAtTheCourseFile().get(course)<database.getCoursesPlaceAtTheCourseFile().get(coursesReg.get(i))){
+                coursesReg.add(i,course);
+                isEntered=true;
+            }
+        }
+        if(!isEntered){
+            coursesReg.add(course);
+        }
     }
     public void deleteCourse(Integer course){
         coursesReg.remove(course);

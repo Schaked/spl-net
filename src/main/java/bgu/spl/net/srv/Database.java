@@ -17,7 +17,9 @@ import java.util.stream.Stream;
  */
 public class Database {
 	private HashMap<String, User> userHashMap;
-	private HashMap<Integer,Course> courseHashMap;
+	private HashMap<Integer, Course> courseHashMap;
+	private HashMap<Integer, Integer> coursesPlaceAtTheCourseFile;
+	int count;
 
 
 
@@ -25,6 +27,8 @@ public class Database {
 	private Database() {
 		userHashMap=new HashMap<>();
 		courseHashMap=new HashMap<>();
+		coursesPlaceAtTheCourseFile=new HashMap<>();
+		count=1;
 		initialize("/home/spl211/IdeaProjects/spl-net/Courses.txt");
 
 	}
@@ -54,6 +58,8 @@ public class Database {
 					kdamCourses = Stream.of(data[2].substring(1, data[2].length() - 1).split(",")).mapToInt(Integer::parseInt).toArray();
 				}
 				courseHashMap.put(Integer.parseInt(data[0]),new Course(Integer.parseInt(data[0]),data[1],kdamCourses,Integer.parseInt(data[3])));
+				coursesPlaceAtTheCourseFile.put(Integer.parseInt(data[0]),count);
+				count=count+1;
 			}
 		}
 		catch (FileNotFoundException ex){
@@ -70,4 +76,7 @@ public class Database {
 		return courseHashMap;
 	}
 
+	public HashMap<Integer, Integer> getCoursesPlaceAtTheCourseFile() {
+		return coursesPlaceAtTheCourseFile;
+	}
 }

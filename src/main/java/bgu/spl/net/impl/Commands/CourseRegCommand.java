@@ -29,7 +29,8 @@ public class CourseRegCommand extends Command {
             boolean courseAvailable=database.getCourseHashMap().get(CourseNumber).getAvailableSpots()>0;
             boolean isLogin=database.getUserHashMap().get(protocol.getUserName()).isLogin();
             boolean hasAllKdamCourses=KDAMIsOk(protocol.getUserName());
-            if(!isRegisterToCourse && courseAvailable && isLogin && hasAllKdamCourses){
+            boolean isAdmin=database.getUserHashMap().get(protocol.getUserName()).isAdmin();
+            if(!isRegisterToCourse && courseAvailable && isLogin && hasAllKdamCourses && !isAdmin){
                 User user=database.getUserHashMap().get(protocol.getUserName());
                 user.setCourse(CourseNumber);
                 return new AckCommand(optcode);

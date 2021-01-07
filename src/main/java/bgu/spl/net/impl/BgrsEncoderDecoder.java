@@ -146,7 +146,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                 case 3://Login
                 case 4://Logout
                 case 5://CourseReg
-                case 10://UnRegistered
+                case 10://UnRegister
                     return ("ACK "+message.getOptcode()+'\0').getBytes();
                 case 6://KdamCheck
                     String kdamCoursesList=Arrays.toString(course.getKdamCoursesList()).replace(", ",",");
@@ -158,7 +158,7 @@ public class BgrsEncoderDecoder implements MessageEncoderDecoder <Command> {
                     return ("ACK "+message.getOptcode()+"\n"+Course+"\n"+Seats_Available+"\n"+Students_Registered+'\0').getBytes();
                 case 8://StudentStat
                     String Student = "Student: "+message.getUserName();
-                    String Courses = "Courses "+user.getRegList().toString();
+                    String Courses = "Courses: "+user.getRegList().toString();
                     return ("ACK "+message.getOptcode()+"\n"+Student+"\n"+Courses+'\0').getBytes();
                 case 9://IsRegistered
                     String isRegistered = "NOT REGISTERED";
